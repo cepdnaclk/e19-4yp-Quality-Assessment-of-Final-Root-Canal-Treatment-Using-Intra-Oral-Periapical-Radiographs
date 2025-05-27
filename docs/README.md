@@ -12,7 +12,7 @@ title: AI-Assisted Tool for Assessing Quality of Final Root Canal Treatment Usin
 
 - E/19/008, Chandula Adhikari, [e19008@eng.pdn.ac.lk](mailto:e19008@eng.pdn.ac.lk)
 - E/19/009, Kaumini Adikari, [e19009@eng.pdn.ac.lk](mailto:e19009@eng.pdn.ac.lk)
-- E/19/063, Sansala Dassanayake, [e19063@eng.pdn.ac.lk](mailto:e19063@eng.pdn.ac.lk)
+- E/19/063, Sandeep Dassanayake, [e19063@eng.pdn.ac.lk](mailto:e19063@eng.pdn.ac.lk)
 
 #### Supervisors
 
