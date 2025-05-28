@@ -64,6 +64,10 @@ Our project consist of the following key components:
   - Keypoint detection for apex and pulpal floor mapping.
 - **Labeling and Classification**: Using descriptive prompts and classifiers to determine RCT quality (e.g., overfilled, underfilled, etc.).
 
+-  
+    ![Methodology Diagram](./images//methodology.png)  
+    *Figure: Overview of the methodology pipeline.*
+
 ---
 
 ## Experiment Setup and Implementation
