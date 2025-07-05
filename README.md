@@ -33,6 +33,11 @@ This project proposes an AI-based tool that leverages deep learning techniques t
   - Treated Tooth Localization (e.g., CenterNet)
   - Instance & Semantic Segmentation (e.g., U-Net, Transformer-based models)
   - Keypoint Detection (e.g., root apex, pulpal floor)
+
+  -  
+    ![Methodology Diagram](docs/images/methodology.png)  
+    *Figure: Overview of the methodology pipeline.*
+
 - **Evaluation**: Accuracy, Precision, Recall, F1-Score, and AUC-ROC
 - **Clinical Validation**: Comparison with endodontist assessments in trials
 
