@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Root Canal Treatment Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .header-logo {
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            height: 150px;
+            width: auto;
+            /* filter: brightness(0) invert(1); */
+            opacity: 0.9;
+        }
+
+        .header-text {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            font-weight: 400;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            margin: 0;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .nav a:hover {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 0;
+            padding: 4rem 3rem;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        /* Section Styling */
+        .section {
+            margin: 4rem 0;
+            padding: 3rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #1e3a8a;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .section h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section h2 i {
+            color: #1e3a8a;
+            font-size: 1.8rem;
+        }
+
+        .section p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+
+        .section ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section li {
+            margin: 0.75rem 0;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+
+        /* Methodology Grid */
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .methodology-item {
+            background: white;
+            color: #1a1a1a;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .methodology-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #1e3a8a;
+        }
+
+        .methodology-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #1e3a8a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .methodology-item p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Image Placeholder */
+        .image-placeholder {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 200px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            color: #374151;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 2rem 0;
+            text-align: center;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .image-placeholder.small {
+            min-height: 200px;
+        }
+
+        .image-placeholder img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Team Section */
+        .team-section {
+            margin: 4rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .team-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #1e3a8a;
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-id {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        .member-email {
+            color: #1e3a8a;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .member-email:hover {
+            text-decoration: underline;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            color: #1e3a8a;
+            margin-bottom: 3rem;
+        }
+
+        /* Footer Links */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-link {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-link i {
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e3a8a;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-logo img {
+                height: 60px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-content {
+                padding: 2rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 2rem;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e3a8a;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            background: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header fade-in">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="images/logos/uop_logo.png" alt="University of Peradeniya Logo">
+                </div>
+                <div class="header-text">
+                    <h1><i class="fas fa-tooth"></i> AI-Assisted Root Canal Treatment Assessment</h1>
+                    <p class="subtitle">Advanced Machine Learning Tool for Quality Evaluation of Dental IOPA Radiographs</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav fade-in">
+        <div class="container">
+            <ul>
+                <li><a href="#abstract"><i class="fas fa-file-alt"></i> Abstract</a></li>
+                <li><a href="#related-works"><i class="fas fa-search"></i> Related Works</a></li>
+                <li><a href="#methodology"><i class="fas fa-cogs"></i> Methodology</a></li>
+                <li><a href="#experiment"><i class="fas fa-flask"></i> Experiment</a></li>
+                <li><a href="#results"><i class="fas fa-chart-line"></i> Results</a></li>
+                <li><a href="#conclusion"><i class="fas fa-check-circle"></i> Conclusion</a></li>
+                <li><a href="#team"><i class="fas fa-users"></i> Team</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content fade-in">
+            <!-- Abstract Section -->
+            <section id="abstract" class="section fade-in">
+                <h2><i class="fas fa-file-alt"></i> Abstract</h2>
+                <p>We will develop an AI-based tool to automatically assess the quality of root canal treatments (RCTs) using intraoral periapical (IOPA) radiographs. Our solution aims to address the subjectivity and inconsistency in manual diagnosis by dental professionals.</p>
+                <p>The tool will detect treated teeth, evaluate treatment adequacy (e.g., underfilled, overfilled, voids, separated instruments), and visually mark key anatomical features such as the root apex and pulp floor. We expect this system to assist clinicians in making reliable decisions while also providing a standardized platform for training and research.</p>
+                
+                <!-- Placeholder for abstract visualization -->
+                <div class="image-placeholder">
+                    <div>
+                        <i class="fas fa-brain" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>AI-Powered Dental Analysis</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem;">Visualization of AI processing dental radiographs</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Related Works Section -->
+            <section id="related-works" class="section fade-in">
+                <h2><i class="fas fa-search"></i> Related Works</h2>
+                <p>We analyzed prior work on:</p>
+                <ul>
+                    <li>Automated tooth detection and segmentation in radiographs</li>
+                    <li>Deep learning applications in dental diagnosis</li>
+                    <li>Vision-language models (e.g., CLIP, BiomedCLIP) and medical segmentation models (e.g., MedSAM)</li>
+                    <li>Root canal treatment evaluation criteria and limitations in existing clinical assessment practices</li>
+                </ul>
+            </section>
+
+            <!-- Methodology Section -->
+            <section id="methodology" class="section fade-in">
+                <h2><i class="fas fa-cogs"></i> Methodology</h2>
+                <p>Our project consists of the following key components:</p>
+                
+                <div class="methodology-grid">
+                    <div class="methodology-item">
+                        <h4><i class="fas fa-database"></i> Data Collection</h4>
+                        <p>We will collect a dataset of 1,000 anonymized IOPA radiographs from the Faculty of Dental Sciences.</p>
+                    </div>
+                    <div class="methodology-item">
+                        <h4><i class="fas fa-tags"></i> Annotation</h4>
+                        <p>Dental experts will annotate regions including treated teeth, canals, crowns, root apices, and potential voids.</p>
+                    </div>
+                    <div class="methodology-item">
+                        <h4><i class="fas fa-magic"></i> Preprocessing</h4>
+                        <p>Images will be enhanced using contrast normalization and artifact reduction techniques.</p>
+                    </div>
+                    <div class="methodology-item">
+                        <h4><i class="fas fa-network-wired"></i> Model Architecture</h4>
+                        <p>Treated tooth localization using object detection (e.g., CenterNet). Root canal region segmentation using transformer-based models.</p>
+                    </div>
+                    <div class="methodology-item">
+                        <h4><i class="fas fa-tag"></i> Labeling & Classification</h4>
+                        <p>Using descriptive prompts and classifiers to determine RCT quality (e.g., overfilled, underfilled, etc.).</p>
+                    </div>
+                </div>
+
+                <div class="image-placeholder">
+                    <img 
+                        src="images/diagrams/methodology.png" 
+                        alt="Methodology Pipeline Diagram" 
+                        style="width: 100%; max-width: 600px; display: block; margin: 0 auto; border-radius: 12px; box-shadow: 0 2px 12px rgba(30,64,175,0.08); background: #fff;"
+                    />
+                    <p style="text-align: center; font-size: 0.95rem; margin-top: 0.5rem; color: #444;">
+                        Overview of the methodology pipeline
+                    </p>
+                </div>
+            </section>
+
+            <!-- Experiment Setup Section -->
+            <section id="experiment" class="section fade-in">
+                <h2><i class="fas fa-flask"></i> Experiment Setup and Implementation</h2>
+                <ul>
+                    <li>We will use pre-trained models like <strong>BiomedCLIP</strong> for zero-shot classification and <strong>MedSAM</strong> for guided segmentation.</li>
+                    <li>Initial implementation will focus on binary classification: treated vs untreated.</li>
+                    <li>We will simulate and visualize feature embeddings using t-SNE/UMAP.</li>
+                    <li>Classifier accuracy will be benchmarked against expert assessments.</li>
+                    <li>For segmentation, we will evaluate precision, recall, IoU, and Dice score.</li>
+                </ul>
+
+                <!-- Placeholder for experiment setup visualization -->
+                <div class="image-placeholder small">
+                    <div>
+                        <i class="fas fa-microscope" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <p>Experimental Setup</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Add: experimental-setup.png</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results" class="section fade-in">
+                <h2><i class="fas fa-chart-line"></i> Results and Analysis</h2>
+                <p>We will evaluate:</p>
+                <ul>
+                    <li>Accuracy of treated tooth detection (expected ≥90%)</li>
+                    <li>Classification performance across RCT conditions (overfilled, underfilled, voids, etc.)</li>
+                    <li>Effectiveness of visual overlays for clinical interpretability</li>
+                    <li>Feedback from dental experts via a usability study</li>
+                </ul>
+
+                <!-- Placeholder for results visualization -->
+                <div class="image-placeholder">
+                    <div>
+                        <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Results Dashboard</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem;">Add: results-dashboard.png</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conclusion Section -->
+            <section id="conclusion" class="section fade-in">
+                <h2><i class="fas fa-check-circle"></i> Conclusion</h2>
+                <p>We aim to deliver a reliable AI-assisted diagnostic tool to support root canal treatment evaluation. Our project will improve diagnostic consistency, aid dental training, and pave the way for future integration with electronic dental records and mobile diagnostic apps.</p>
+            </section>
+
+            <!-- Publications Section -->
+            <section class="section fade-in">
+                <h2><i class="fas fa-book"></i> Publications</h2>
+                <p>Publications will be added here as the project progresses.</p>
+            </section>
+
+            <!-- Team Section -->
+            <section id="team" class="section fade-in">
+                <h2 class="section-title"><i class="fas fa-users"></i> Team</h2>
+                
+                <h3 style="color: #1e3a8a; font-size: 1.8rem; margin-bottom: 2rem; text-align: center;">Team Members</h3>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="member-name">Chandula Adhikari</div>
+                        <div class="member-id">E/19/008</div>
+                        <a href="mailto:e19008@eng.pdn.ac.lk" class="member-email">e19008@eng.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="member-name">Kaumini Adikari</div>
+                        <div class="member-id">E/19/009</div>
+                        <a href="mailto:e19009@eng.pdn.ac.lk" class="member-email">e19009@eng.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="member-name">Sandeep Dassanayake</div>
+                        <div class="member-id">E/19/063</div>
+                        <a href="mailto:e19063@eng.pdn.ac.lk" class="member-email">e19063@eng.pdn.ac.lk</a>
+                    </div>
+                </div>
+
+                <h3 style="color: #1e3a8a; font-size: 1.8rem; margin: 4rem 0 2rem; text-align: center;">Supervisors</h3>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Dr. I. Nawinne</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:indika@eng.pdn.ac.lk" class="member-email">indika@eng.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Prof. R.D. Jayasinghe</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:rdjayasinghe@dental.pdn.ac.lk" class="member-email">rdjayasinghe@dental.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Dr. R.M.S.G.K. Rasnayake</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:rmsgk@dental.pdn.ac.lk" class="member-email">rmsgk@dental.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Prof. R. Ragel</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:rragel@eng.pdn.ac.lk" class="member-email">rragel@eng.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Prof. M.C.N. Fonseka</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:mcnf@eng.pdn.ac.lk" class="member-email">mcnf@eng.pdn.ac.lk</a>
+                    </div>
+                    
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="member-name">Dr. P.A. Hewage</div>
+                        <div class="member-id">Supervisor</div>
+                        <a href="mailto:pahewage@eng.pdn.ac.lk" class="member-email">pahewage@eng.pdn.ac.lk</a>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer fade-in">
+        <div class="container">
+            <p>&copy; 2024 AI-Assisted Root Canal Treatment Assessment Project. University of Peradeniya.</p>
+            <div class="footer-links">
+                <a href="/cepdnaclk/e19-4yp-Quality-Assessment-of-Final-Root-Canal-Treatment-Using-Intra-Oral-Periapical-Radiographs/" class="footer-link">
+                    <i class="fab fa-github"></i>
+                    <span>Repository</span>
+                </a>
+                <a href="https://cepdnaclk.github.io/e19-4yp-ai-assisted-rct-evaluation" class="footer-link">
+                    <i class="fas fa-globe"></i>
+                    <span>Project Page</span>
+                </a>
+                <a href="http://www.ce.pdn.ac.lk/" class="footer-link">
+                    <i class="fas fa-university"></i>
+                    <span>Computer Engineering</span>
+                </a>
+                <a href="https://eng.pdn.ac.lk/" class="footer-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>University of Peradeniya</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <div class="scroll-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Add fade-in animation to sections when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html> 
